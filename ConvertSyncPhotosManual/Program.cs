@@ -10,6 +10,7 @@ namespace ConvertSyncPhotosManual
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("{0} - Start manual convert...", "");
         }
     }
 }
