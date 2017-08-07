@@ -17,7 +17,32 @@ namespace ConvertSyncPhotosManual
         private readonly int HEIGHT = 150;
         private readonly int QUALITY = 40;
 
-        public void Resize(string sourceFullFileName, string sourceDirectoryName, string destDirectoryName)
+        private string sourceDirectoryName;
+        private string destDirectoryName;
+
+        public string SourceDirectoryName { get { return sourceDirectoryName; } }
+
+        public Converter()
+        {
+            // get setting from XML
+            Settings settings = new Settings();
+
+            // watcherDirectory
+            sourceDirectoryName = @settings.Fields.WatcherDirectory;
+            if (!Directory.Exists(sourceDirectoryName))
+            {
+                throw new Exception("Watcher directory not exists! See \"settings.xml\".");
+            }
+
+            // convertDirectory
+            destDirectoryName = @settings.Fields.ConvertDirectory;
+            if (!Directory.Exists(destDirectoryName))
+            {
+                throw new Exception("Convert directory not exists! See \"settings.xml\".");
+            }
+        }
+
+        public void Resize(string sourceFullFileName)
         {
             #region get destFileName
             string sourceFileName = Path.GetFileName(sourceFullFileName);
@@ -36,6 +61,8 @@ namespace ConvertSyncPhotosManual
             //// create destination directory if exists
             //if (!Directory.Exists(destFullParentDirectory)) Directory.CreateDirectory(destFullParentDirectory);
             #endregion
+
+            if (File.Exists(destFileName)) return;
 
             try
             {
@@ -64,9 +91,9 @@ namespace ConvertSyncPhotosManual
             }
         }
 
-        public async Task ResizeAsync(string sourceFullFileName, string sourceDirectoryName, string destDirectoryName)
+        public async Task ResizeAsync(string sourceFullFileName)
         {
-            var task = new Task(() => Resize(sourceFullFileName, sourceDirectoryName, destDirectoryName));
+            var task = new Task(() => Resize(sourceFullFileName));
             task.Start();
             await task;
         }
