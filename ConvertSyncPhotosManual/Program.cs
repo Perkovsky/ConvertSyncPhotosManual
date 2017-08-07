@@ -13,7 +13,6 @@ namespace ConvertSyncPhotosManual
         {
             Converter converter = new Converter();
             string sourceDirectory = converter.SourceDirectoryName;
-            //var allFiles = Directory.GetFiles(sourceDirectoryName);
 
             Console.WriteLine("{0} - Start manual convert.", DateTime.Now.ToString());
             var allFiles = Directory.EnumerateFiles(sourceDirectory, "*.jpg", SearchOption.AllDirectories);
