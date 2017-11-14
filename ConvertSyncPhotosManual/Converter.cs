@@ -13,14 +13,12 @@ namespace ConvertSyncPhotosManual
     /// </summary>
     public class Converter
     {
-        private readonly int WIDTH = 200;
-        private readonly int HEIGHT = 150;
         private readonly int QUALITY = 40;
 
         private string sourceDirectoryName;
         private string destDirectoryName;
 
-        public string SourceDirectoryName { get { return sourceDirectoryName; } }
+        public string SourceDirectoryName => sourceDirectoryName;
 
         public Converter()
         {
@@ -42,7 +40,7 @@ namespace ConvertSyncPhotosManual
             }
         }
 
-        public void Resize(string sourceFullFileName)
+        public void Resize(string sourceFullFileName, int width, int height)
         {
             #region get destFileName
             string sourceFileName = Path.GetFileName(sourceFullFileName);
@@ -70,7 +68,7 @@ namespace ConvertSyncPhotosManual
                 // format is automatically detected though can be changed.
                 ISupportedImageFormat format = new JpegFormat { Quality = QUALITY };
                 //ISupportedImageFormat format = new WebPFormat { Quality = QUALITY }; // see: https://ru.wikipedia.org/wiki/WebP
-                Size size = new Size(WIDTH, 0);
+                Size size = new Size(width, 0);
                 using (MemoryStream inStream = new MemoryStream(photoBytes))
                 {
                     // initialize the ImageFactory using the overload to preserve EXIF metadata.
@@ -83,17 +81,17 @@ namespace ConvertSyncPhotosManual
                                     .Save(destFileName);
                     }
                 }
-                Console.WriteLine("{0} - Copied & Resized to {1}x{2}", destFileName, WIDTH, HEIGHT);
+                Console.WriteLine("{0} - Copied & Resized to {1}x{2}", destFileName, width, height);
             }
             catch (Exception e)
             {
-                Console.WriteLine(string.Format("{0} - Copied & Resized to {1}x{2} error:", destFileName, WIDTH, HEIGHT) + Environment.NewLine + e.ToString());
+                Console.WriteLine(string.Format("{0} - Copied & Resized to {1}x{2} error:", destFileName, width, height) + Environment.NewLine + e.ToString());
             }
         }
 
-        public async Task ResizeAsync(string sourceFullFileName)
+        public async Task ResizeAsync(string sourceFullFileName, int width, int height)
         {
-            var task = new Task(() => Resize(sourceFullFileName));
+            var task = new Task(() => Resize(sourceFullFileName, width, height));
             task.Start();
             await task;
         }

@@ -19,7 +19,8 @@ namespace ConvertSyncPhotosManual
             Console.WriteLine("Total file(s): {0}", allFiles.Count());
             foreach (var item in allFiles)
             {
-              converter.ResizeAsync(item);
+                //TODO: use aync version
+                converter.Resize(item, 1024, 768);
             }
             Console.WriteLine("{0} - Finish manual convert.", DateTime.Now.ToString());
 
